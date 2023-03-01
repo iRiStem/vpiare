@@ -1,6 +1,6 @@
 {
-  "port": 3001,
-  "cors_origin": "http://localhost:3000",
+  "port": 80,
+  "cors_origin": "http://new.v-piare.ru",
   "mongoUri": "",
   "mysql_connect": {
     "host": "localhost",
@@ -11,6 +11,6 @@
   "mysql_db_users": "db_users",
   "vk_client_id": "51546071",
   "vk_client_secret": "0KLcHCONmCgw0FVJNIpU",
-  "vk_redirect_uri": "http://localhost:3000/cabinet/",
+  "vk_redirect_uri": "http://new.v-piare.ru/cabinet/",
   "vk_user_access_rights": "offline,status,ads,groups,stats,market"
 }
