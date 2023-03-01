@@ -19,7 +19,7 @@ const PORT = config.get('port') || 3001
 
 const server = http.createServer(app);
 
-
+server.on("listening", function () { server.close(); });
 
 server.listen(PORT, () => {
   console.log(`SERVER IS RUNNING on port ${PORT}`);
