@@ -2,9 +2,9 @@ const express = require('express')
 const config = require('config')
 const cors = require('cors');
 const http = require('http');
+const { Server } = require("socket.io");
 
-
-
+const { authConnection } = require( './sockets/auth.socket')
 
 const app = express()
 app.use(cors());
@@ -19,8 +19,39 @@ const PORT = config.get('port') || 3001
 
 const server = http.createServer(app);
 
-server.on("listening", function () { server.close(); });
+const io = new Server(server, {
+  cors: {
+    origin: config.get('cors_origin'),
+    methods: ['GET', 'POST'],
+
+  },
+  maxHttpBufferSize: 1e20,
+});
 
 server.listen(PORT, () => {
   console.log(`SERVER IS RUNNING on port ${PORT}`);
 });
+//server.on("listening", function () { server.close(); });
+
+io.on('connection', (socket) => {
+  authConnection(io, socket)
+})
+
+async function start() {
+  try {
+    app.listen(PORT, () => {
+      console.log(`SERVER IS RUNNING on port ${PORT}`);
+  });
+
+  } catch (e) {
+    console.log('Server error', e.message)
+    process.exit(1)
+  }
+
+}
+
+
+//start()
+
+
+
