@@ -1,5 +1,6 @@
 {
-  "port": 80,
+  "port": "8080:8080",
+  "baseUrl": "http://new.v-piare.ru",
   "cors_origin": "http://new.v-piare.ru",
   "mongoUri": "",
   "mysql_connect": {
