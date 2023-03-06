@@ -1,15 +1,15 @@
 {
-  "port": "8080:8081",
+  "port": "3002",
   "baseUrl": "http://new.v-piare.ru",
   "cors_origin": "http://new.v-piare.ru",
   "mongoUri": "",
   "mysql_connect": {
     "host": "localhost",
     "user": "root",
-    "password": "1234",
+    "password": "$bQ@i9k#",
     "charset": "utf8mb4"
   },
-  "mysql_db_users": "db_users",
+  "mysql_db_users": "db_nvpiare",
   "vk_client_id": "51546071",
   "vk_client_secret": "0KLcHCONmCgw0FVJNIpU",
   "vk_redirect_uri": "http://new.v-piare.ru/cabinet/",

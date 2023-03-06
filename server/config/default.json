@@ -1,7 +1,6 @@
 {
-  "port": 3001,
+  "port": 3002,
   "cors_origin": "http://localhost:3000",
-  "mongoUri": "",
   "mysql_connect": {
     "host": "localhost",
     "user": "root",

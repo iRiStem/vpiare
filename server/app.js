@@ -15,7 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 
-const PORT = config.get('port') || 3001
+const PORT = config.get('port') || 3002
 
 const server = http.createServer(app);
 
