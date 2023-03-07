@@ -10,7 +10,8 @@
 
 # production
 /build
-/src/app-settings.js
+/src/app-setting.js
+src/app-setting.js
 
 # misc
 .DS_Store
