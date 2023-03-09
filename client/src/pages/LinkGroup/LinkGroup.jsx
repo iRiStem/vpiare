@@ -3,7 +3,7 @@ import { useGroups } from '../../hooks/io_groups.hook';
 import UserProfile from '../../components/UserProfile/UserProfile';
 import GroupVK from '../../components/Groups/GroupVK';
 
-const Cabinet = () => {
+const LinkGroup = () => {
   const { auth } = useAuth()
   const { groups } = useGroups()
   return (
@@ -29,4 +29,4 @@ const Cabinet = () => {
       </div>
   );
 }
-export default Cabinet;
+export default LinkGroup;

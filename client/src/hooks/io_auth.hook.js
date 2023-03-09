@@ -38,25 +38,33 @@ export function useAuth() {
 
     socket.on('access_token', (data) => {
       console.log(data)
+      if (!data) {
+        navigate("/", { replace: true })
+      }
 
-      if (data) {
+      if (data.access_token) {
         socket.emit('auth_user', data)
         navigate("/cabinet", { replace: true })
-      } else {
-        navigate("/", { replace: true })
+      }
+      if (!data.access_token) {
+        socket.emit('get_user', userId)
+        socket.emit('save_group', data)
+        navigate("/cabinet", { replace: true })
       }
 
 
     })
 
     socket.on('auth_user', (data) => {
-      console.log(data)
+      console.log('auth_user', data)
       if (data) {
         setAuth(data)
 
         localStorage.setItem('userId', data.user_id);
         setUserId(data.user_id)
         socket.emit('user_login', data)
+
+        socket.emit('get_groups', data)
       } else {
         navigate("/", { replace: true })
       }
@@ -64,7 +72,7 @@ export function useAuth() {
     })
 
     socket.on('user_login', (data) => {
-      console.log('USER', data)
+
     })
 
     return (() => {

@@ -22,14 +22,11 @@ class ApiVK {
 
 
   async getAccessToken(res) {
-    console.log('AUTH VK')
     try {
       await axios.post(this.access_token_uri).then((result) => {
-        console.log(result.data)
-
         this.user_id = result.data.user_id
         this.access_token = result.data.access_token
-            return res(result.data)
+        return res(result.data)
       })
 
       //return result
@@ -41,10 +38,8 @@ class ApiVK {
   }
 
   getUserInfo(res) {
-    console.log('User Info')
     try {
       axios.post(this.users_uri).then((result) => {
-        console.log('xxx', result.data)
         return res(result.data.response ? result.data.response[0] : null)
       })
     } catch(e) {

@@ -5,6 +5,7 @@ const http = require('http');
 const { Server } = require("socket.io");
 
 const { authConnection } = require( './sockets/auth.socket')
+const { groupsConnection } = require( './sockets/groups.socket')
 
 const app = express()
 app.use(cors());
@@ -35,6 +36,7 @@ server.listen(PORT, () => {
 
 io.on('connection', (socket) => {
   authConnection(io, socket)
+  groupsConnection(io, socket)
 })
 
 async function start() {

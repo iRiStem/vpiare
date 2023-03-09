@@ -1,7 +1,6 @@
 import React from 'react';
-import { client_id, redirect_url, user_access_rights } from '../../app-setting';
 
-const cabinet_link = `https://oauth.vk.com/authorize?client_id=${client_id}&redirect_uri=${redirect_url}&scope=${user_access_rights}&display=page`
+const cabinet_link = `https://oauth.vk.com/authorize?client_id=${process.env.REACT_APP_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_REDIRECT_URL}&scope=${process.env.REACT_APP_USER_ACCESS_RIGTHS}&display=page`
 
 const Main = () => {
   return (
