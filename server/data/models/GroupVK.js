@@ -6,9 +6,152 @@ const connection0 = mysql.createConnection(options0);
 //const connection = mysql.createConnection(options);
 connection0.connect()
 
-
+const { default: axios } = require('axios');
 
 class GroupVK {
+
+  newSubscriber(data, res) {
+    const options = Object.assign({database: data.db}, options0)
+
+    const connection = mysql.createConnection(options);
+
+    let command = `SELECT * FROM usersList WHERE vkId = ${data.user}`;
+
+    connection.query(command, (err, result, field) => {
+      if (result.length > 0) {
+
+        let command = `UPDATE usersList SET subscriptions = CONCAT(subscriptions, '${data.subId},') WHERE vkId=${data.user};`;
+        connection.query(command, (err, result, field) => {
+          if (result) {
+            console.log('Подписка добавлена')
+            return res('Подписка добавлена')
+          }
+          else {
+            console.log(err)
+          }
+        })
+
+      }
+      else {
+
+        let command = `SELECT * FROM groupInfo`;
+
+        connection.query(command, (err, result, field) => {
+          if (result) {
+            const apiKey = result[0].apiKey;
+            const relation = {
+              '1': 'не женат/не замужем',
+              '2': 'есть друг/есть подруга',
+              '3': 'помолвлен/помолвлена',
+              '4': 'женат/замужем',
+              '5': 'все сложно',
+              '6': 'в активном поиске',
+              '7': 'влюблен/влюблена',
+              '8': 'в гражданском браке',
+              '0': 'не указано',
+            }
+            let NewData = new Date();
+            let options = { weekday: 'narrow', year: 'numeric', month: '2-digit', day: 'numeric' };
+            let regData = NewData.toLocaleString(options).split(',').join('');
+            axios.post(`https://api.vk.com/method/users.get?user_ids=${data.user}&fields=country,city,relation&access_token=${apiKey}&v=5.131`)
+                .then((dataInfo) => {
+                  if (dataInfo) {
+                    const info = dataInfo.data.response[0]
+                    const user = {
+                      vkId: `${info.id}`,
+                      firstName: info.first_name,
+                      lastName: info.last_name,
+                      country: info.country ? info.country.title : '',
+                      city: info.city ? info.city.title : '',
+                      relation: info.relation ? relation[info.relation] : '',
+                      dateSubscribe: regData,
+                      subscriptions: `${data.subId}, `
+                    }
+
+                    let command = `INSERT INTO usersList (${Object.keys(user)}) VALUES (${Object.values(user).map(item => `'${item}'`)});`;
+
+                    connection.query(command, (err, result, field) => {
+                      if (result) {
+                        console.log('Пользователь добавлен в базу')
+                      }
+                      else {
+                        console.log(err)
+                      }
+                    })
+
+
+                  }
+                })
+
+          }
+          else {
+            console.log(err)
+          }
+        })
+
+      }
+    })
+  }
+
+
+  getUserGroups(db, res) {
+    const options = Object.assign({database: db}, options0)
+
+    const connection = mysql.createConnection(options);
+    let command = `SELECT * FROM usersGroups`;
+
+    connection.query(command, (err, resultGroups, field) => {
+
+      if (resultGroups) {
+
+        let command = `SELECT * FROM usersList`;
+        connection.query(command, (err, resultUsers, field) => {
+
+          if (resultUsers) {
+
+            let newArr = resultGroups.map(item => {
+
+              return {
+                ...item,
+                subscribers: resultUsers.filter(el => el.subscriptions.split(' ').join('').split(',').includes(String(item.idGroup)))
+              }
+            })
+
+            return res(newArr)
+
+          }
+          else if (err) {
+            console.log(err)
+          }
+        })
+
+      }
+      else if (err) {
+        console.log(err)
+      }
+
+    })
+
+  }
+
+
+
+  createUserGroup(data, db, res) {
+    const options = Object.assign({database: db}, options0)
+
+    const connection = mysql.createConnection(options);
+
+    let command = `INSERT INTO usersGroups (${Object.keys(data)}) VALUES (${Object.values(data).map(item => `'${item}'`)});`;
+
+    connection.query(command, (err, result, field) => {
+      if (result) {
+        console.log('Группа подписчиков добавлена')
+      }
+      else {
+        console.log(err)
+      }
+    })
+  }
 
   findGroups(vkId, groups, res) {
 

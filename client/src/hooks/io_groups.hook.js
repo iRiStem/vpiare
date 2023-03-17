@@ -1,29 +1,38 @@
 import {useEffect, useState} from 'react';
 import {useSocket} from '../connections/io_connect';
-import {useNavigate} from "react-router-dom";
-
 
 export function useGroups() {
-  let navigate = useNavigate();
+
   const {socket} = useSocket()
 
-
-  const [groups, setGroups] = useState();
+  const [groupsVK, setGroupsVK] = useState({items: [], count: 0});
+  const [groupsIdsInfo, setGroupsIdsInfo] = useState({});
+  const [groupsApp, setGroupsApp] = useState({});
 
 
   useEffect(() => {
-    socket.on('set_groups', (data) => {
-      if (data) {
-        setGroups(data)
-      } else {
-        navigate("/", {replace: true})
-      }
+    socket.emit('get_groups_vk')
 
+    //socket.emit('send_test_message')
+
+    socket.on('set_groups_vk', (data) => {
+      setGroupsVK(data)
     })
 
+    socket.on('set_groups_ids', (data) => {
+      setGroupsIdsInfo(data)
+    })
+
+    socket.on('set_groups_app', (data) => {
+      setGroupsApp(data)
+    })
+
+    socket.on('set_group_id', (data) => {
+      setGroupsIdsInfo({...groupsIdsInfo, ...{[data.id] : data}})
+    })
 
   }, [socket])
 
 
-  return {groups}
+  return {groupsVK, groupsIdsInfo, groupsApp}
 }

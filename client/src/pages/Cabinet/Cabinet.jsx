@@ -1,32 +1,27 @@
-import { useAuth } from '../../hooks/io_auth.hook';
-import { useGroups } from '../../hooks/io_groups.hook';
-import UserProfile from '../../components/UserProfile/UserProfile';
+import { useContext } from 'react';
+import { GroupsContext } from '../../context/GroupsContext';
 import GroupVK from '../../components/Groups/GroupVK';
 
 const Cabinet = () => {
-  const { auth } = useAuth()
-  const { groups } = useGroups()
+  const groups  = useContext(GroupsContext)
+  const groupsVK = groups.groupsVK
+  const groupsIdsInfo = groups.groupsIdsInfo
+
   return (
-      <div className="Cabinet">
-        <nav className="navbar navbar-light bg-light">
-          <div className="container-fluid">
-            <a className="navbar-brand" href="/">V-piare</a>
-            <div className="d-flex">
-              {auth ? <UserProfile auth={ auth }/> : '' }
-            </div>
-          </div>
-        </nav>
-        <div className="container  text-center">
-          <h1>Cabinet</h1>
+      <div className="Content">
+        <h1 className="text-center">Cabinet</h1>
 
-          <h3>Сообщества</h3>
-          <div>{groups ? groups.count : 'нет сообществ' }</div>
+        <h3>Сообщества</h3>
+        <div>{groupsVK ? groupsVK.count : 'нет сообществ' }</div>
 
-          {groups ? groups.items.map((id, key) => {
-                return (<GroupVK key={key} id={id} auth={ auth }/>)
+        <div>
+          {groupsVK ? groupsVK.items.map((id, key) => {
+                return (<GroupVK key={key} info={groupsIdsInfo[id] ? groupsIdsInfo[id] : {}}/>)
               }) : ''}
         </div>
       </div>
+
+
   );
 }
 export default Cabinet;

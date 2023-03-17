@@ -1,58 +1,50 @@
-const ApiVK = require('../api/auth.vk')
-const User = require('../data/models/User')
 
-let authVk = new ApiVK()
-let user = new User()
+const authConnection = (io, socket, authVk, user) => {
 
-const authConnection = (io, socket) => {
-  socket.on('test_server', (data) => {
-    socket.emit('send_test_server', 'server work')
-  })
-
-
-  socket.on('access_token', async (data) => {
-    authVk.code = data
-    authVk.getAccessToken(function(result) {
-      console.log('getAccessToken', result)
-
-      socket.emit('access_token', result)
+  const userLogin = (data) => {
+    user.findOne(data.user_id, function(result){
+      data.status = result ? 'update' : 'create'
+      if (result) user.update(data,function(result_up){})
+      else user.create(data, function(result_create){})
+      socket.emit('login', data)
     })
-  })
+  }
 
-  socket.on('auth_user', async (data) => {
+  const getUserInfo = (data) => {
     authVk.user_id = data.user_id
     authVk.access_token = data.access_token
     authVk.getUserInfo(function(result) {
-      socket.emit('auth_user', result ? Object.assign(data, result) : result)
-
-      //if (result) return res.status(200).json({message: 'AUTH VK', data: result})
+      if (!result) {
+        socket.emit('logout')
+      }
+      if (result) {
+        userLogin(Object.assign(data, result))
+      }
     })
+  }
 
-  })
 
-  socket.on('user_login', async (data) => {
-
-    user.findOne(data.user_id, function(result){
-      if (result) user.update(data,function(result_up){
-        socket.emit('user_login', 'update')
-      })
-      else user.create(data, function(result_create){
-        socket.emit('user_login', 'create')
-      })
+  socket.on('get_access_token', async (code) => {
+    authVk.code = code
+    authVk.getAccessToken(function(result) {
+      getUserInfo(result)
     })
   })
 
 
-  socket.on('get_user', async (data) => {
+  socket.on('get_user_info', async (data) => {
     user.findOne(data, function(result){
       if (result) {
         data = { user_id: result.vkId, access_token: result.user_token }
+        getUserInfo(data)
       }
-      socket.emit('access_token', data ? data : null)
     })
   })
 
 
+  socket.on('test_server', () => {
+    socket.emit('send_test_server', 'server work')
+  })
 
 
 }

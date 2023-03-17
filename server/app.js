@@ -4,8 +4,14 @@ const cors = require('cors');
 const http = require('http');
 const { Server } = require("socket.io");
 
+const ApiVK = require('./api/auth.vk')
+const User = require('./data/models/User')
+let authVk = new ApiVK()
+let user = new User()
+
 const { authConnection } = require( './sockets/auth.socket')
 const { groupsConnection } = require( './sockets/groups.socket')
+const { mailingConnection } = require( './sockets/mailing.socket')
 
 const app = express()
 app.use(cors());
@@ -14,7 +20,6 @@ app.use(express.urlencoded({ extended: true }));
 
 // parse application/json
 app.use(express.json());
-
 
 const PORT = config.get('port') || 3002
 
@@ -35,8 +40,9 @@ server.listen(PORT, () => {
 //server.on("listening", function () { server.close(); });
 
 io.on('connection', (socket) => {
-  authConnection(io, socket)
-  groupsConnection(io, socket)
+  authConnection(io, socket, authVk, user)
+  groupsConnection(io, socket, authVk)
+  mailingConnection(io, socket, authVk)
 })
 
 async function start() {

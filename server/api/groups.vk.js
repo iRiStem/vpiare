@@ -3,11 +3,14 @@ const config = require('config')
 
 const client_id = config.get('vk_client_id')
 const client_secret = config.get('vk_client_secret')
+const api_url = 'https://api.vk.com/method/'
+const api_v = '5.131'
 
 class ApiGroupsVK {
   user_id = ''
   access_token = ''
   group_id = ''
+
 
 
 
@@ -22,6 +25,23 @@ class ApiGroupsVK {
 
   get groupById_link () {
     return `https://oauth.vk.com/authorize?client_id=${client_id}&redirect_uri=${config.get('vk_redirect_uri')}&group_ids=${this.group_id}&display=page&scope=photos,messages,docs,manage&response_type=code&v=5.131`
+  }
+
+  getMethodData(method, params, res) {
+    const data = Object.assign({'access_token': this.access_token, 'v': api_v}, params)
+    const str = Object.entries(data)
+        .map(([k, v]) => `${k}=${v}`)
+        .join('&');
+
+    try {
+      axios.post(`${api_url}${method}?${str}`)
+          .then((result) => {
+        return res(result.data.response ? result.data.response : null)
+      })
+    } catch(e) {
+      console.log(e)
+      return res(null)
+    }
   }
 
 
