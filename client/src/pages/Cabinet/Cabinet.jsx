@@ -7,6 +7,9 @@ const Cabinet = () => {
   const groupsVK = groups.groupsVK
   const groupsIdsInfo = groups.groupsIdsInfo
 
+
+  console.log(groups)
+
   return (
       <div className="Content">
         <h1 className="text-center">Cabinet</h1>

@@ -94,6 +94,22 @@ class GroupVK {
   }
 
 
+  getUserGroupsInclude(user_id, items, res) {
+
+    let newArr = items.map(item => `(SCHEMA_NAME = 'u${user_id}_g${item}')`).join(' or ')
+    let command = `select * FROM INFORMATION_SCHEMA.SCHEMATA where ${newArr};`
+
+    connection0.query(command, (err, result, field) => {
+
+      let groupsInDB = result.map(item => parseInt(item.SCHEMA_NAME.split('g')[1]));
+
+
+      return res(groupsInDB)
+    })
+
+
+  }
+
   getUserGroups(db, res) {
     const options = Object.assign({database: db}, options0)
 

@@ -46,7 +46,6 @@ class ApiGroupsVK {
 
 
   getGroups(res) {
-    console.log('get groups')
     try {
       axios.post(this.groups_uri).then((result) => {
         console.log('groups', result.data)

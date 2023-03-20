@@ -12,12 +12,23 @@ const groupsConnection = (io, socket, authVk, user) => {
 
 
   const getGroupsApp = (items) => {
-    groups_app = {}
-    items.forEach(gid => {
-      let db = `u${authVk.user_id}_g${gid}`
-      groupVK.getUserGroups(db, function(result) {
-        groups_app[gid] = result
-        socket.emit('set_groups_app', groups_app)
+    groupVK.getUserGroupsInclude(authVk.user_id, items, function(result) {
+      groups_app = {}
+      items.forEach(gid => {
+
+        if (result.indexOf(gid) < 0) {
+          //groups_app[gid] = []
+          //socket.emit('set_groups_app', groups_app)
+        }
+        else {
+          let db = `u${authVk.user_id}_g${gid}`
+          groupVK.getUserGroups(db, function(res) {
+            groups_app[gid] = res
+            socket.emit('set_groups_app', groups_app)
+          })
+        }
+
+
       })
     })
   }
@@ -29,7 +40,10 @@ const groupsConnection = (io, socket, authVk, user) => {
       if (res) {
         const groups_ids = {};
         res.forEach(item => {
-          setGroupIdInfo(item)
+          setGroupIdInfo(item , function (result) {
+            groups_ids[item.id] = result
+            socket.emit('set_groups_ids', groups_ids)
+          })
         });
 
       }
@@ -37,23 +51,34 @@ const groupsConnection = (io, socket, authVk, user) => {
   }
 
 
-  const setGroupIdInfo = (item) => {
+  const setGroupIdInfo = (item, res) => {
+    //socket.emit('set_group_id', item)
     groupsVKApi.group_id = item.id
     groupVK.findGroup(groupsVKApi, function(result) {
+      console.log('getGroupsIdsInfo', result, item)
       if (result.length > 0) item.include = true
-      socket.emit('set_group_id', item)
+
+      if (result.length == 0) item.link = groupsVKApi.groupById_link
+
+      return res(item)
     })
   }
 
   socket.on('get_groups_vk', async () => {
     groupsVKApi.user_id = authVk.user_id;
     groupsVKApi.access_token = authVk.access_token
-    const params = {'user_ids': authVk.user_id}
+    const params = {
+      'user_ids': authVk.user_id,
+      'extended':0,
+      'filter': 'admin'
+
+    }
+
     groupsVKApi.getMethodData('groups.get', params, function (res) {
       if (res) {
+        socket.emit('set_groups_vk', res)
         getGroupsApp(res.items ? res.items : [])
         getGroupsIdsInfo(res.items ? res.items : [])
-        socket.emit('set_groups_vk', res)
       }
 
       if (!res) {

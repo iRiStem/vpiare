@@ -26,9 +26,16 @@ const authConnection = (io, socket, authVk, user) => {
 
   socket.on('get_access_token', async (code) => {
     authVk.code = code
+
+
     authVk.getAccessToken(function(result) {
-      getUserInfo(result)
+      if (result.access_token)
+        getUserInfo(result)
+      if (result && !result.access_token)
+        socket.emit('save_group', result)
     })
+
+
   })
 
 

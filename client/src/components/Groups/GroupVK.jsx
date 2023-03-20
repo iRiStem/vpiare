@@ -2,6 +2,8 @@ import { useGroup } from '../../hooks/io_group.hook';
 
 const GroupVK = ({ info }) => {
   //const { group } = useGroup(id)
+
+
   return (
       <div>
         <div>{ info.id }</div>

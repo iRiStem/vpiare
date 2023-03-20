@@ -23,6 +23,7 @@ const NewGroup = () => {
     titleGroup: '',
     textGroup: '',
     linkGroup: '',
+    textButtonOne: 'OK',
     idGroup: ''
   });
 

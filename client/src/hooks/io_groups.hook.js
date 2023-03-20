@@ -20,6 +20,7 @@ export function useGroups() {
     })
 
     socket.on('set_groups_ids', (data) => {
+      console.log(data)
       setGroupsIdsInfo(data)
     })
 
@@ -28,7 +29,15 @@ export function useGroups() {
     })
 
     socket.on('set_group_id', (data) => {
+
       setGroupsIdsInfo({...groupsIdsInfo, ...{[data.id] : data}})
+      console.log('data',data)
+      console.log('groupsIdsInfo', groupsIdsInfo)
+    })
+
+
+    socket.on('save_group', (data) => {
+      socket.emit('save_group', data)
     })
 
   }, [socket])
