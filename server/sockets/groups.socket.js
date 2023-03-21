@@ -57,9 +57,11 @@ const groupsConnection = (io, socket, authVk, user) => {
   const setGroupIdInfo = (item, res) => {
     //socket.emit('set_group_id', item)
     groupsVKApi.group_id = item.id
+    item.link = groupsVKApi.groupById_link
+
+
     groupVK.findGroup(groupsVKApi, function(result) {
       if (result.length > 0) item.include = true
-      if (result.length == 0) item.link = groupsVKApi.groupById_link
       return res(item)
     })
   }
