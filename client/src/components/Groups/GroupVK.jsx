@@ -5,9 +5,8 @@ const GroupVK = ({ info }) => {
 
 
   return (
-      <div>
-        <div>{ info.id }</div>
-        <div>{ info.name }</div>
+      <div className="card-body">
+        <h6 className="card-title">{ info.name }</h6>
 
         <div>{
           info.include ?
@@ -18,6 +17,7 @@ const GroupVK = ({ info }) => {
               </a>
         }
         </div>
+        <small>test info - { info.id }</small>
       </div>
 
   );

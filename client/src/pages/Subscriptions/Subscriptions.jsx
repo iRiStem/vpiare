@@ -8,15 +8,16 @@ import UserGroups from '../../components/Groups/UserGroups';
 const Subscriptions = () => {
 
   const groups  = useContext(GroupsContext)
-  const groupsVK = groups.groupsVK
   const groupsIdsInfo = groups.groupsIdsInfo
   const groupsApp = groups.groupsApp
   const groupsIdsInclude = groups.groupsIdsInclude
 
+
+
   const [showId, setShowId] = useState()
 
-  const setShowClassId = event => {
-    setShowId(event.target.id)
+  const setShowClassId = (event, id) => {
+    setShowId(id)
   }
 
   return (
@@ -29,11 +30,11 @@ const Subscriptions = () => {
                 return (
                     <div className="accordion-item" key={key}>
                       <h2 className="accordion-header">
-                        <button className="accordion-button" id={id} type="button" onClick={setShowClassId}>
+                        <button className="accordion-button" name={id} type="button" onClick={(ev) => setShowClassId(ev, id)}>
                           <GroupVK key={key} info={groupsIdsInfo[id] ? groupsIdsInfo[id] : {}}/>
                         </button>
                       </h2>
-                      <div  className={`accordion-collapse collapse ${ showId === id.toString() ? 'show' : ''}`} >
+                      <div  className={`accordion-collapse collapse ${ showId === id ? 'show' : ''}`} >
                         <div className="accordion-body">
                           {groupsApp[id] ?
                               <UserGroups key={key} items={groupsApp[id]}/>

@@ -30,14 +30,29 @@ const Layout = () => {
 
           <div className="container  ">
             <div className="row justify-content-start pt-4">
-              <div className="col-3">
-                <Sidebar />
-              </div>
-              <div className="col-9">
-                {<GroupsContext.Provider value={{groupsVK, groupsIdsInfo, groupsApp, groupsIdsInclude}}>
-                  <Outlet />
-                </GroupsContext.Provider>}
-              </div>
+              { groupsVK.count > 0 ?
+                  <div className="col-3">
+                    <Sidebar />
+                  </div>
+                  : ''
+              }
+              { groupsVK.count > 0 ?
+                  <div className="col-9">
+                    {<GroupsContext.Provider value={{groupsVK, groupsIdsInfo, groupsApp, groupsIdsInclude}}>
+                      <Outlet />
+                    </GroupsContext.Provider>}
+                  </div>
+                  :
+                  <div className="col-12">
+                    <div className="alert alert-info">
+                      <p>
+                      <a className="btn btn-info" href="https://vk.com/groups?w=groups_create">
+                        Cоздать сообщество
+                      </a>
+                      </p>
+                    </div>
+                  </div>
+              }
             </div>
           </div>
         </div>

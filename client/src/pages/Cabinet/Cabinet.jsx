@@ -11,12 +11,15 @@ const Cabinet = () => {
       <div className="Content">
         <h1 className="text-center">Cabinet</h1>
 
-        <h3>Сообщества</h3>
-        <div>{groupsVK ? groupsVK.count : 'нет сообществ' }</div>
+        <h3>Сообщества <span className="badge bg-secondary">{groupsVK.count}</span></h3>
 
-        <div>
+        <div className="row">
           {groupsVK ? groupsVK.items.map((id, key) => {
-                return (<GroupVK key={key} info={groupsIdsInfo[id] ? groupsIdsInfo[id] : {}}/>)
+                return (
+                    <div className="card col-3 m-2" key={key}>
+                      <GroupVK key={key} info={groupsIdsInfo[id] ? groupsIdsInfo[id] : {}}/>
+                    </div>
+                  )
               }) : ''}
         </div>
       </div>

@@ -37,7 +37,6 @@ export function useAuth() {
     })
 
     socket.on('login', (data) => {
-      console.log('login',data)
       setAuth(data)
       setToken(data.access_token)
       setIsAuth(true)
