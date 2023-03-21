@@ -15,7 +15,6 @@ const groupsConnection = (io, socket, authVk, user) => {
     groupVK.getUserGroupsInclude(authVk.user_id, items, function(result) {
       groups_app = {}
       items.forEach(gid => {
-
         if (result.indexOf(gid) < 0) {
           //groups_app[gid] = []
           //socket.emit('set_groups_app', groups_app)
@@ -39,10 +38,14 @@ const groupsConnection = (io, socket, authVk, user) => {
     groupsVKApi.getMethodData('groups.getById', params, function (res) {
       if (res) {
         const groups_ids = {};
+        const groups_ids_include = [];
         res.forEach(item => {
           setGroupIdInfo(item , function (result) {
             groups_ids[item.id] = result
             socket.emit('set_groups_ids', groups_ids)
+
+            if(result.include) groups_ids_include.push(item.id)
+            socket.emit('set_groups_ids_include', groups_ids_include)
           })
         });
 
@@ -55,11 +58,8 @@ const groupsConnection = (io, socket, authVk, user) => {
     //socket.emit('set_group_id', item)
     groupsVKApi.group_id = item.id
     groupVK.findGroup(groupsVKApi, function(result) {
-      console.log('getGroupsIdsInfo', result, item)
       if (result.length > 0) item.include = true
-
       if (result.length == 0) item.link = groupsVKApi.groupById_link
-
       return res(item)
     })
   }

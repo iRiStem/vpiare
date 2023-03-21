@@ -11,6 +11,7 @@ const Subscriptions = () => {
   const groupsVK = groups.groupsVK
   const groupsIdsInfo = groups.groupsIdsInfo
   const groupsApp = groups.groupsApp
+  const groupsIdsInclude = groups.groupsIdsInclude
 
   const [showId, setShowId] = useState()
 
@@ -24,7 +25,7 @@ const Subscriptions = () => {
         <h3>Subscriptions</h3>
 
         <div className="accordion">
-          {groupsVK ? groupsVK.items.map((id, key) => {
+          {groupsIdsInclude ? groupsIdsInclude.map((id, key) => {
                 return (
                     <div className="accordion-item" key={key}>
                       <h2 className="accordion-header">

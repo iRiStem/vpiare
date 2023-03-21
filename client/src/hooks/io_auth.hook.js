@@ -38,11 +38,18 @@ export function useAuth() {
 
     socket.on('login', (data) => {
       console.log('login',data)
-      localStorage.setItem('userId', data.user_id);
-      setUserId(data.user_id)
       setAuth(data)
       setToken(data.access_token)
       setIsAuth(true)
+
+    })
+
+    socket.on('go_cabinet', (data) => {
+      if(data.user_id) {
+        localStorage.setItem('userId', data.user_id);
+        setUserId(data.user_id)
+      }
+
       navigate("/cabinet", { replace: true })
     })
 
@@ -51,9 +58,7 @@ export function useAuth() {
 
 
 
-
-
-    socket.on('access_token', (data) => {
+    socket.on('access_token_old', (data) => {
       if (!data) {
         navigate("/", { replace: true })
       }

@@ -197,6 +197,8 @@ class GroupVK {
 
   create(data, res) {
 
+    console.log(data.groups)
+
     let groupToken = data.groups[0];
     let command = `CREATE DATABASE u${data.id}_g${groupToken.group_id};`;
 

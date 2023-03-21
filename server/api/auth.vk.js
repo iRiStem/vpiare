@@ -27,6 +27,7 @@ class ApiVK {
         this.user_id = result.data.user_id
         this.access_token = result.data.access_token
         return res(result.data)
+
       })
 
       //return result

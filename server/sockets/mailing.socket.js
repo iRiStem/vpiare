@@ -87,6 +87,7 @@ const mailingConnection = (io, socket, authVk, user) => {
   })
 
   socket.on('add_newSubscriber', (data) => {
+    console.log(data)
     if (data) {
       groupVK.newSubscriber(data, function(res) {
         console.log(res)

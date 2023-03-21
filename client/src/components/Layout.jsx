@@ -12,7 +12,7 @@ import { GroupsContext } from '../context/GroupsContext';
 
 const Layout = () => {
   const { auth } = useAuth()
-  const { groupsVK, groupsIdsInfo, groupsApp } = useGroups()
+  const { groupsVK, groupsIdsInfo, groupsApp, groupsIdsInclude } = useGroups()
 
   return (
       <AuthContext.Provider value={{auth}}>
@@ -34,7 +34,7 @@ const Layout = () => {
                 <Sidebar />
               </div>
               <div className="col-9">
-                {<GroupsContext.Provider value={{groupsVK, groupsIdsInfo, groupsApp}}>
+                {<GroupsContext.Provider value={{groupsVK, groupsIdsInfo, groupsApp, groupsIdsInclude}}>
                   <Outlet />
                 </GroupsContext.Provider>}
               </div>

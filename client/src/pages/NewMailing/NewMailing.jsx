@@ -9,6 +9,7 @@ const NewMailing = () => {
   const groupsVK = groups.groupsVK
   const groupsIdsInfo = groups.groupsIdsInfo
   const groupsApp = groups.groupsApp
+  const groupsIdsInclude = groups.groupsIdsInclude
 
   const [userId, setUserId] = useState(localStorage.getItem('userId') || null);
 
@@ -18,7 +19,7 @@ const NewMailing = () => {
   const { sendNewMailing } = useNewAppMailing()
   const [idGroup, setIdGroup] = useState(0)
 
-  const [idGroupVK, setIdGroupVK] = useState(groupsVK ? groupsVK.items[0] : '')
+  const [idGroupVK, setIdGroupVK] = useState(groupsIdsInclude.length > 0 ? groupsIdsInclude[0] : '')
   const [form, setForm] = useState({
     nameMailing: '',
     textMailing: '',
@@ -39,7 +40,7 @@ const NewMailing = () => {
   }
 
   const changeGroupHandler = event => {
-    setIdGroupVK(idGroupVK, event.target.value)
+    setIdGroupVK(event.target.value)
   }
 
   const sendHandler = event => {
@@ -52,7 +53,7 @@ const NewMailing = () => {
         <h1 className="text-center">Cabinet</h1>
         <h3>NewMailing</h3>
 
-        <h4>{ groupsVK ? groupsVK.count : 0 }</h4>
+        <h4>{ groupsIdsInclude ? groupsIdsInclude.length : 0 }</h4>
 
         <div className="mb-3">
           <label className="form-label">Сообщество</label>
@@ -63,7 +64,7 @@ const NewMailing = () => {
               className="form-control" onChange={changeGroupHandler} >
             <option value="0">Выберите сообщество</option>
             {
-              groupsVK.items.map((item, key) => {
+              groupsIdsInclude.map((item, key) => {
                 return <option key={key} value={item}>{item}</option>
               })
             }

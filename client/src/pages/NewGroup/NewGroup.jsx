@@ -5,9 +5,10 @@ import {GroupsContext} from '../../context/GroupsContext';
 
 const NewGroup = () => {
   const groups  = useContext(GroupsContext)
-  const groupsVK = groups.groupsVK
+
   const groupsIdsInfo = groups.groupsIdsInfo
   const groupsApp = groups.groupsApp
+  const groupsIdsInclude = groups.groupsIdsInclude
 
   const [userId, setUserId] = useState(localStorage.getItem('userId') || null);
   const miniAppId = process.env.REACT_APP_MINI_ID
@@ -17,7 +18,7 @@ const NewGroup = () => {
   const { createNewGroup } = useNewAppGroup()
   const [idGroup, setIdGroup] = useState(0)
   const [linkGroup, setLinkGroup] = useState()
-  const [idGroupVK, setIdGroupVK] = useState(groupsVK ? groupsVK.items[0] : '')
+  const [idGroupVK, setIdGroupVK] = useState(groupsIdsInclude[0] ? groupsIdsInclude[0] : '')
   const [form, setForm] = useState({
     nameGroup: '',
     titleGroup: '',
@@ -30,41 +31,44 @@ const NewGroup = () => {
 
 
   const changeHandler = event => {
-    const num = groupsApp[idGroupVK].length
+    const num = groupsApp[idGroupVK] ? groupsApp[idGroupVK].length : 0
     setIdGroup( (num > 0) ? (groupsApp[idGroupVK][num - 1].idGroup + 1) : 1)
     const link = `https://vk.com/app${miniAppId}#m=${idGroup}_${idGroupVK}-${userId}`
     setForm({ ...form, ...{[event.target.name]: event.target.value, ['linkGroup']: link, ['idGroup']: idGroup} })
   }
 
   const changeGroupHandler = event => {
-    setIdGroupVK(idGroupVK, event.target.value)
+    setIdGroupVK(event.target.value)
   }
 
   const saveHandler = event => {
     console.log(form)
+
+
     createNewGroup(form, `u${userId}_g${idGroupVK}`)
   }
+
 
   return (
       <div className="Content">
         <h1 className="text-center">Cabinet</h1>
         <h3>NewGroup</h3>
 
-        <h4>{ groupsVK ? groupsVK.count : 0 }</h4>
+        <h4>{ groupsIdsInclude ? groupsIdsInclude.length : 0 }</h4>
 
         <h4>{ form.linkGroup }</h4>
 
         <div className="mb-3">
-          <label className="form-label">Сообщество</label>
+          <label className="form-label">Сообщество  {idGroupVK}</label>
           <select
                  name="idGroup"
                  value={idGroupVK}
                  placeholder="Выберите сообщество"
                  className="form-control" onChange={changeGroupHandler} >
-            <option value="0">Выберите сообщество</option>
+            <option>Выберите сообщество</option>
             {
-              groupsVK.items.map((item, key) => {
-                return <option key={key} value={item}>{item}</option>
+              groupsIdsInclude.map((item, key) => {
+                return <option key={key}>{item}</option>
               })
             }
 

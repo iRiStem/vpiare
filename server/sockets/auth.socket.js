@@ -29,8 +29,11 @@ const authConnection = (io, socket, authVk, user) => {
 
 
     authVk.getAccessToken(function(result) {
-      if (result.access_token)
+      socket.emit('go_cabinet', result)
+      if (result.access_token) {
         getUserInfo(result)
+      }
+
       if (result && !result.access_token)
         socket.emit('save_group', result)
     })

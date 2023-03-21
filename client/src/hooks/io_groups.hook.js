@@ -8,6 +8,7 @@ export function useGroups() {
   const [groupsVK, setGroupsVK] = useState({items: [], count: 0});
   const [groupsIdsInfo, setGroupsIdsInfo] = useState({});
   const [groupsApp, setGroupsApp] = useState({});
+  const [groupsIdsInclude, setGroupsIdsInclude] = useState([]);
 
 
   useEffect(() => {
@@ -20,8 +21,11 @@ export function useGroups() {
     })
 
     socket.on('set_groups_ids', (data) => {
-      console.log(data)
       setGroupsIdsInfo(data)
+    })
+
+    socket.on('set_groups_ids_include', (data) => {
+      setGroupsIdsInclude(data)
     })
 
     socket.on('set_groups_app', (data) => {
@@ -29,10 +33,7 @@ export function useGroups() {
     })
 
     socket.on('set_group_id', (data) => {
-
       setGroupsIdsInfo({...groupsIdsInfo, ...{[data.id] : data}})
-      console.log('data',data)
-      console.log('groupsIdsInfo', groupsIdsInfo)
     })
 
 
@@ -43,5 +44,5 @@ export function useGroups() {
   }, [socket])
 
 
-  return {groupsVK, groupsIdsInfo, groupsApp}
+  return {groupsVK, groupsIdsInfo, groupsApp, groupsIdsInclude}
 }
