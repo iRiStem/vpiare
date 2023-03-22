@@ -128,7 +128,7 @@ const groupsConnection = (io, socket, authVk, user) => {
   socket.on('new_group', async (data, db) => {
     console.log(data)
     groupVK.createUserGroup(data, db, function(res) {
-      socket.emit('group_success', 'Группа создана')
+      socket.emit('group_success', res)
     })
   })
 

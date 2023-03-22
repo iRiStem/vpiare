@@ -161,7 +161,7 @@ class GroupVK {
 
     connection.query(command, (err, result, field) => {
       if (result) {
-        console.log('Группа подписчиков добавлена')
+        return res('Группа подписчиков добавлена')
       }
       else {
         console.log(err)

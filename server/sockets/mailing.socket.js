@@ -38,20 +38,43 @@ const mailingConnection = (io, socket, authVk, user) => {
       if (res) {
 
         getDataMailing(db, function (result) {
-          const params = {
-            peer_ids: `${result.users}`,
-            access_token: `${result.apiKey}`,
-            message: `${encodeURIComponent(data.textMailing)}`,
-            dont_parse_links: 0,
-            random_id: 0,
-            disable_mentions: 0,
-            intent: 'default',
-          }
 
-          groupsVKApi.getMethodData('messages.send', params, function (res) {
-            console.log('messages.send', res)
-            socket.emit('group_success', 'Рассылка отправлена')
-          })
+          let users = result.users
+
+          //users = [782474893, 782474893, 782474893]
+          let i =0
+
+          setInterval(() => {
+            if (users.length > 0) {
+              let subs = users.splice(0, 1)
+
+              const params = {
+                peer_ids: `${subs.join(',')}`,
+                access_token: `${result.apiKey}`,
+                message: `${encodeURIComponent(data.textMailing)} -- ${i}`,
+                dont_parse_links: 0,
+                random_id: 0,
+                disable_mentions: 0,
+                intent: 'default',
+              }
+
+              groupsVKApi.getMethodData('messages.send', params, function (res) {
+                i++;
+               console.log('messages.send', res)
+                socket.emit('group_success', 'Рассылка отправлена ' + subs.length + ': ' + subs.join(',') + ' остаток: ' + users.length)
+               })
+
+            } else {
+              clearInterval()
+            }
+
+          }, 10000)
+
+
+
+
+
+
         });
 
 
@@ -67,7 +90,7 @@ const mailingConnection = (io, socket, authVk, user) => {
       apiKey = result ? result[0].apiKey : '';
 
       getUsers(db, function (resultUsers) {
-        return res({apiKey: apiKey, users: resultUsers.join(',')})
+        return res({apiKey: apiKey, users: resultUsers})
       })
 
     })
