@@ -12,7 +12,7 @@ import { GroupsContext } from '../context/GroupsContext';
 
 const Layout = () => {
   const { auth } = useAuth()
-  const { groupsVK, groupsIdsInfo, groupsApp, groupsIdsInclude } = useGroups()
+  const { groupsVK, groupsIdsInfo, groupsApp, groupsIdsInclude, groupsError, groupsSuccess } = useGroups()
 
   return (
       <AuthContext.Provider value={{auth}}>
@@ -29,6 +29,16 @@ const Layout = () => {
 
 
           <div className="container  ">
+
+            { groupsError ?
+                <div className="alert alert-danger mt-2">{groupsError}</div>
+                : ''
+            }
+
+            { groupsSuccess ?
+                <div className="alert alert-success mt-2">{groupsSuccess}</div>
+                : ''
+            }
             <div className="row justify-content-start pt-4">
               { groupsVK.count > 0 ?
                   <div className="col-3">

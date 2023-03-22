@@ -50,6 +50,7 @@ const mailingConnection = (io, socket, authVk, user) => {
 
           groupsVKApi.getMethodData('messages.send', params, function (res) {
             console.log('messages.send', res)
+            socket.emit('group_success', 'Рассылка отправлена')
           })
         });
 
@@ -91,7 +92,7 @@ const mailingConnection = (io, socket, authVk, user) => {
     if (data) {
       groupVK.newSubscriber(data, function(res) {
         console.log(res)
-        sendTestMessage()
+        //sendTestMessage()
 
       })
     }

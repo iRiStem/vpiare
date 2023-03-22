@@ -27,17 +27,20 @@ const authConnection = (io, socket, authVk, user) => {
   socket.on('get_access_token', async (code) => {
     authVk.code = code
 
-
     authVk.getAccessToken(function(result) {
       socket.emit('go_cabinet', result)
       if (result.access_token) {
         getUserInfo(result)
       }
 
-      if (result && !result.access_token)
+      if (result && result.groups && result.groups[0].access_token)
         socket.emit('save_group', result)
-    })
 
+      if (result && result.groups && !result.groups[0].access_token) {
+        socket.emit('group_error', 'Отсутствует токен группы - попробуйте подключить позже')
+      }
+
+    })
 
   })
 

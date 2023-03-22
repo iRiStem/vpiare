@@ -110,12 +110,17 @@ const groupsConnection = (io, socket, authVk, user) => {
 
   socket.on('save_group', async (data) => {
 
-    data.id = groupsVKApi.user_id
+    //data.id = groupsVKApi.user_id
     console.log('SAVEGROUP', data)
+    if (!data.id) {
+      socket.emit('group_error', 'Отсутствует id user - попробуйте подключить позже')
+    }
+    if (data.id) {
+      groupVK.create(data, function(res) {
+        socket.emit('group_success', 'Сообщество подключено')
+      })
+    }
 
-    groupVK.create(data, function(res) {
-
-    })
 
     //socket.emit('save_token', data ? data : null)
   })
@@ -123,7 +128,7 @@ const groupsConnection = (io, socket, authVk, user) => {
   socket.on('new_group', async (data, db) => {
     console.log(data)
     groupVK.createUserGroup(data, db, function(res) {
-
+      socket.emit('group_success', 'Группа создана')
     })
   })
 

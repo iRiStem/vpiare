@@ -10,6 +10,12 @@ export function useGroups() {
   const [groupsApp, setGroupsApp] = useState({});
   const [groupsIdsInclude, setGroupsIdsInclude] = useState([]);
 
+  const [groupsError, setGroupsError] = useState();
+  const [groupsSuccess, setGroupsSuccess] = useState();
+
+
+
+  const [userId, setUserId] = useState(localStorage.getItem('userId') || null);
 
   useEffect(() => {
     socket.emit('get_groups_vk')
@@ -38,11 +44,22 @@ export function useGroups() {
 
 
     socket.on('save_group', (data) => {
-      socket.emit('save_group', data)
+      if (userId) {
+        data.id = userId
+        socket.emit('save_group', data)
+      }
+    })
+
+    socket.on('group_error', (data) => {
+      setGroupsError(data)
+    })
+
+    socket.on('group_success', (data) => {
+      setGroupsSuccess(data)
     })
 
   }, [socket])
 
 
-  return {groupsVK, groupsIdsInfo, groupsApp, groupsIdsInclude}
+  return {groupsVK, groupsIdsInfo, groupsApp, groupsIdsInclude, groupsError, groupsSuccess}
 }

@@ -205,7 +205,7 @@ const Home = ({ fetchedUser, go }) => {
 
 
 
-	  let message = groupSubs.autoMessage;
+	  /*let message = groupSubs.autoMessage;
 
 		let NewData = new Date();
 		let options = { weekday: 'narrow', year: 'numeric', month: '2-digit', day: 'numeric' };
@@ -224,9 +224,9 @@ const Home = ({ fetchedUser, go }) => {
 			let regx = new RegExp(key, 'g')
 			message = message.replace(regx, variables[key])
 		}
+*/
 
-
-		socket.emit('send_firstMessage', { db: `u${user}_g${id}`, user: fetchedUser.id, subId: groupSubscribers, time: groupSubs.dateActive, message: message })
+		//socket.emit('send_firstMessage', { db: `u${user}_g${id}`, user: fetchedUser.id, subId: groupSubscribers, time: groupSubs.dateActive, message: message })
 		setSubscribe(true);
 		setShowPopupSub((prev) => !prev);
 	}
