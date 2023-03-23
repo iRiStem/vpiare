@@ -14,7 +14,6 @@ const NewGroup = () => {
   const miniAppId = process.env.REACT_APP_MINI_ID
 
 
-
   const { createNewGroup } = useNewAppGroup()
   const [idGroup, setIdGroup] = useState(0)
   const [linkGroup, setLinkGroup] = useState()
@@ -24,7 +23,8 @@ const NewGroup = () => {
     titleGroup: '',
     textGroup: '',
     linkGroup: '',
-    textButtonOne: 'OK',
+    textButtonOne: 'Подписаться',
+    textButtonTwo: 'Отписаться',
     idGroup: ''
   });
 
@@ -42,24 +42,21 @@ const NewGroup = () => {
   }
 
   const saveHandler = event => {
-    console.log(form)
-
-
     createNewGroup(form, `u${userId}_g${idGroupVK}`)
   }
 
 
   return (
       <div className="Content">
-        <h1 className="text-center">Cabinet</h1>
-        <h3>NewGroup</h3>
+        <h1 className="text-center">Кабинет</h1>
+        <h3>Новая группа</h3>
 
         <h4>{ groupsIdsInclude ? groupsIdsInclude.length : 0 }</h4>
 
         <h4>{ form.linkGroup }</h4>
 
         <div className="mb-3">
-          <label className="form-label">Сообщество  {idGroupVK}</label>
+          <label className="form-label">Сообщество</label>
           <select
                  name="idGroup"
                  value={idGroupVK}
@@ -68,7 +65,7 @@ const NewGroup = () => {
             <option>Выберите сообщество</option>
             {
               groupsIdsInclude.map((item, key) => {
-                return <option key={key}>{item}</option>
+                return <option key={key} value={item}>{groupsIdsInfo[item].name}</option>
               })
             }
 

@@ -88,7 +88,6 @@ const mailingConnection = (io, socket, authVk, user) => {
   const getDataMailing = (db, res) => {
     mailing.selectGroupInfo(db, function (result) {
       apiKey = result ? result[0].apiKey : '';
-
       getUsers(db, function (resultUsers) {
         return res({apiKey: apiKey, users: resultUsers})
       })

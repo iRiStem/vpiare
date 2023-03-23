@@ -22,8 +22,8 @@ const Subscriptions = () => {
 
   return (
       <div className="Content">
-        <h1 className="text-center">Cabinet</h1>
-        <h3>Subscriptions</h3>
+        <h1 className="text-center">Кабинет</h1>
+        <h3>Группы</h3>
 
         <div className="accordion">
           {groupsIdsInclude ? groupsIdsInclude.map((id, key) => {

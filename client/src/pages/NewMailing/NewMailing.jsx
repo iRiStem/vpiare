@@ -50,8 +50,8 @@ const NewMailing = () => {
 
   return (
       <div className="Content">
-        <h1 className="text-center">Cabinet</h1>
-        <h3>NewMailing</h3>
+        <h1 className="text-center">Кабинет</h1>
+        <h3>Новая рассылка</h3>
 
         <h4>{ groupsIdsInclude ? groupsIdsInclude.length : 0 }</h4>
 
@@ -65,7 +65,7 @@ const NewMailing = () => {
             <option value="0">Выберите сообщество</option>
             {
               groupsIdsInclude.map((item, key) => {
-                return <option key={key} value={item}>{item}</option>
+                return <option key={key} value={item}>{groupsIdsInfo[item].name}</option>
               })
             }
 
